@@ -1,0 +1,382 @@
+:root{
+  --primary-red:#e50914;
+  --dark-red:#b20710;
+  --white:#ffffff;
+  --light:#f5f5f5;
+  --black:#111;
+  --glass:rgba(255,255,255,0.2);
+  --blur:blur(15px);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI,sans-serif;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:linear-gradient(135deg,var(--white),#ffe5e5);
+  color:var(--black);
+  overflow-x:hidden;
+}
+
+/* ===== BUBBLE BACKGROUND ===== */
+.bubbles{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  overflow:hidden;
+}
+.bubbles span{
+  position:absolute;
+  bottom:-100px;
+  width:40px;
+  height:40px;
+  background:rgba(229,9,20,0.25);
+  border-radius:50%;
+  animation:bubble linear infinite;
+}
+@keyframes bubble{
+  0%{transform:translateY(0) scale(0.6);opacity:0}
+  20%{opacity:1}
+  100%{transform:translateY(-120vh) scale(1.2);opacity:0}
+}
+
+/* ===== NAVBAR ===== */
+nav{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 80px;
+  background:rgba(255,255,255,0.8);
+  backdrop-filter:var(--blur);
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+nav h1{
+  color:var(--primary-red);
+}
+
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:30px;
+}
+
+nav ul li a{
+  text-decoration:none;
+  color:var(--black);
+  position:relative;
+}
+
+nav ul li a::after{
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:var(--primary-red);
+  transition:0.4s;
+}
+
+nav ul li a:hover::after{
+  width:100%;
+}
+
+/* ===== HERO ===== */
+.hero{
+  height:100vh;
+  background:url("https://images.unsplash.com/photo-1600891964599-f61ba0e24092") center/cover fixed;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.hero h2{
+  background:rgba(255,255,255,0.85);
+  padding:40px;
+  border-radius:25px;
+  font-size:60px;
+  color:var(--primary-red);
+  animation:zoom 3s infinite;
+}
+
+@keyframes zoom{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+}
+
+/* ===== SECTION ===== */
+.section{
+  margin:80px;
+  padding:70px;
+  background:var(--glass);
+  backdrop-filter:var(--blur);
+  border-radius:30px;
+  box-shadow:0 25px 60px rgba(229,9,20,0.25);
+}
+
+.section h2{
+  text-align:center;
+  margin-bottom:40px;
+  color:var(--primary-red);
+}
+
+/* ===== CARDS ===== */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
+  perspective:1000px;
+}
+
+.card{
+  background:var(--white);
+  border-radius:20px;
+  overflow:hidden;
+  transition:0.6s;
+  transform-style:preserve-3d;
+}
+
+.card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  animation:float 4s infinite;
+  transition: transform 0.6s cubic-bezier(.2,.9,.2,1);
+  will-change: transform;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-12px)}
+}
+
+.card h3{
+  padding:20px;
+  text-align:center;
+}
+
+.card:hover{
+  box-shadow:0 35px 70px rgba(229,9,20,0.45);
+}
+
+/* ===== GALLERY ===== */
+/* ================= GALLERY GRID ================= */
+.gallery-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* FORCE 3 per row */
+  gap: 30px;
+  margin-top: 60px;
+}
+
+/* ================= GALLERY ITEM ================= */
+.gallery-item{
+  position: relative;
+  overflow: hidden;
+  border-radius: 25px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+}
+
+/* ================= IMAGE ================= */
+.gallery-item img{
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.gallery-item:hover img{
+  transform: scale(1.15);
+}
+
+/* ================= OVERLAY ================= */
+.overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(229,9,20,0.85), transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: 25px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.gallery-item:hover .overlay{
+  opacity: 1;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px){
+  .gallery-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ===== DIMENSIONAL SCROLL + PARALLAX LAYERS (CSS only) ===== */
+html, body{
+  height:100%;
+  scroll-snap-type: y proximity;
+}
+
+.hero, .section{
+  scroll-snap-align: start;
+}
+
+/* subtle parallax layers behind content to give depth */
+body::before, body::after{
+  content:"";
+  position:fixed;
+  left:0;right:0;top:0;bottom:0;
+  pointer-events:none;
+  z-index:-2;
+  background-repeat:no-repeat;
+  background-position:center top;
+  background-size:cover;
+  will-change:transform,opacity;
+}
+
+body::before{
+  background: radial-gradient(circle at 12% 20%, rgba(229,9,20,0.06), transparent 12%),
+              radial-gradient(circle at 86% 80%, rgba(178,7,16,0.04), transparent 18%);
+  animation:parallaxSlow 20s linear infinite;
+  opacity:0.95;
+}
+
+body::after{
+  background: linear-gradient(180deg, rgba(255,255,255,0.0), rgba(0,0,0,0.02));
+  animation:parallaxFaster 12s linear infinite;
+  opacity:0.7;
+}
+
+@keyframes parallaxSlow{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-6vh)}
+  100%{transform:translateY(0)}
+}
+
+@keyframes parallaxFaster{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-12vh)}
+  100%{transform:translateY(0)}
+}
+
+/* ===== CARD ENTRANCE + HOVER SHINE ===== */
+.card{position:relative; will-change:transform,opacity}
+.cards .card{
+  opacity:0;
+  transform:translateY(18px) scale(0.98) rotateX(6deg);
+  animation:cardPop 0.9s forwards cubic-bezier(.2,.9,.2,1);
+}
+.cards .card:nth-child(1){animation-delay:0.08s}
+.cards .card:nth-child(2){animation-delay:0.18s}
+.cards .card:nth-child(3){animation-delay:0.28s}
+.cards .card:nth-child(4){animation-delay:0.36s}
+.cards .card:nth-child(5){animation-delay:0.44s}
+
+@keyframes cardPop{
+  0%{opacity:0; transform:translateY(18px) scale(0.98) rotateX(6deg)}
+  100%{opacity:1; transform:translateY(0) scale(1) rotateX(0)}
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 100%);
+  transform:translateX(-120%);
+  transition:transform 0.9s cubic-bezier(.2,.9,.2,1);
+  pointer-events:none;
+}
+.card:hover::after{transform:translateX(120%)}
+
+/* stronger 3D tilt on hover for a dimensional feel */
+.cards:hover .card{transition:transform 0.6s cubic-bezier(.2,.9,.2,1)}
+.card:hover{box-shadow:0 45px 90px rgba(229,9,20,0.5)}
+.card:hover img{transform:rotateY(18deg) rotateX(12deg) scale(1.06)}
+
+/* ===== GALLERY LIFT (gentle floating for depth) ===== */
+.gallery-grid{perspective:1200px}
+.gallery-item{transform-origin:center; will-change:transform}
+.gallery-item:nth-child(odd){animation:galleryLiftA 7s ease-in-out infinite}
+.gallery-item:nth-child(even){animation:galleryLiftB 9s ease-in-out infinite}
+
+@keyframes galleryLiftA{
+  0%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-10px) scale(1.01)}
+  100%{transform:translateY(0) scale(1)}
+}
+@keyframes galleryLiftB{
+  0%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-16px) scale(1.02)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+/* small visual polish: sticky section header effect */
+.section h2{position:sticky; top:80px; background:linear-gradient(90deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6)); padding:8px 0}
+
+/* keep animations subtle on reduced-motion preferences */
+@media (prefers-reduced-motion: reduce){
+  body::before, body::after, .gallery-item, .cards .card{animation:none; transition:none}
+}
+
+/* Mobile */
+@media (max-width: 600px){
+  .gallery-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ===== FORM ===== */
+form{
+  max-width:500px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+input,textarea{
+  padding:15px;
+  border:none;
+  border-radius:12px;
+}
+
+button{
+  padding:15px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(45deg,var(--primary-red),var(--dark-red));
+  color:var(--white);
+  cursor:pointer;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(229,9,20,0.6)}
+  70%{box-shadow:0 0 0 20px rgba(229,9,20,0)}
+  100%{box-shadow:0 0 0 0 rgba(229,9,20,0)}
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  nav{padding:20px;flex-direction:column}
+  .hero h2{font-size:40px}
+  .section{margin:30px;padding:40px}
+}
